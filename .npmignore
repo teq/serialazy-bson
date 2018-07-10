@@ -1,0 +1,12 @@
+/node_modules
+/docs
+/lib/src
+/samples/bin
+/spec
+**/tsconfig.json
+**/tslint.json
+tsconfig.base.json
+
+# IDEs
+.idea/
+.vscode/

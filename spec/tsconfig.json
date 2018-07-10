@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+
+    /* Basic Options */
+    "declaration": true,                      /* Generates corresponding '.d.ts' file. */
+    "sourceMap": true,                        /* Generates corresponding '.map' file. */
+    "outDir": "./bin"                         /* Redirect output structure to the directory. */
+
+  }
+}
