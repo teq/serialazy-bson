@@ -5,7 +5,7 @@ import { Serializable, serialize } from '../..';
 
 const { expect } = chai;
 
-describe('bson types', () => {
+describe.skip('bson types', () => {
 
     it('works', async () => {
 
