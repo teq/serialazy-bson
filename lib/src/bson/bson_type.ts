@@ -10,6 +10,18 @@ import {
     Timestamp
 } from 'bson';
 
+export {
+    Binary,
+    BSONRegExp,
+    Code,
+    Decimal128,
+    Double,
+    Int32,
+    Long,
+    ObjectID,
+    Timestamp
+};
+
 export interface BsonDocument {
     [prop: string]: BsonType;
 }

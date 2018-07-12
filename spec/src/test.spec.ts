@@ -1,28 +1,16 @@
 import chai = require('chai');
-import { MongoClient } from 'mongodb';
 
 import { Binary, BSON, BSONRegExp, Code, Double, Int32, Long, ObjectID, Timestamp } from 'bson';
+import { Serializable, serialize } from '../..';
 
 const { expect } = chai;
 
 describe('bson types', () => {
 
-    let client: MongoClient;
-
-    before(async () => {
-        client = await MongoClient.connect('mongodb://localhost:27017');
-    });
-
-    after(async () => {
-        await client.close();
-    });
-
     it('works', async () => {
 
         const serializeOptions = { checkKeys: true };
         const deserializeOptions = { bsonRegExp: true, promoteValues: false };
-
-        const collection = client.db('test').collection('test');
 
         const bson = new BSON();
 
@@ -50,21 +38,18 @@ describe('bson types', () => {
 
         console.debug('!!!DES', des);
 
-        await collection.insertOne(doc);
-
-        const raw = await collection.findOne({}, { raw: true });
-        const item = bson.deserialize(raw, deserializeOptions);
-
-        console.debug('!!!ITEM', item);
-
     });
 
     it('asd', async () => {
 
-        // class Book {
-        //     @MongodbSerializable.Prop()
-        //     public title: string;
-        // }
+        class Book {
+            @Serializable.Prop()
+            public title: string;
+        }
+
+        const book = Object.assign(new Book(), { title: 'Test' });
+
+        const serialized = serialize(book);
 
     });
 
