@@ -1,4 +1,4 @@
-import { Double, Int32 } from 'bson';
+import { BSONRegExp, Double, Int32 } from 'bson';
 import chai = require('chai');
 
 import { deserialize, Serializable, serialize } from '../..';
@@ -203,19 +203,110 @@ describe('default type serializer', () => {
 
             it('should fail to serialize', () => {
                 const greeter = Object.assign(new Greeter(), { message: new Date() });
-                expect(() => serialize(greeter)).to.throw('Unable to serialize property "message": Not a string');
+                expect(
+                    () => serialize(greeter)
+                ).to.throw('Unable to serialize property "message": Not a string');
             });
 
             it('should fail to deserialize', () => {
-                expect(() => deserialize(Greeter, { message: new Date() as any })).to.throw('Unable to deserialize property "message": Not a string');
+                expect(
+                    () => deserialize(Greeter, { message: new Date() as any })
+                ).to.throw('Unable to deserialize property "message": Not a string');
             });
 
         });
 
     });
 
-    describe('for Date properties', () => {});
+    describe('for Date properties', () => {
 
-    describe('for RegExp properties', () => {});
+        class Book {
+            @Serializable.Prop() public release: Date;
+        }
+
+        describe('when the value is a Date', () => {
+
+            it('serializes to a Date', () => {
+                const book = Object.assign(new Book(), { release: new Date() });
+                const serialized = serialize(book);
+                expect(serialized).to.deep.equal(book);
+            });
+
+            it('deserializes to a Date', () => {
+                const serialized = { release: new Date() };
+                const deserialized = deserialize(Book, serialized);
+                expect(deserialized).to.deep.equal(serialized);
+            });
+
+        });
+
+        describe('when the value is not a Date', () => {
+
+            it('should fail to serialize', () => {
+                const book = Object.assign(new Book(), { release: 'none' });
+                expect(
+                    () => serialize(book)
+                ).to.throw('Unable to serialize property "release": Not a Date');
+            });
+
+            it('should fail to deserialize', () => {
+                expect(
+                    () => deserialize(Book, { release: 123 })
+                ).to.throw('Unable to deserialize property "release": Not a Date');
+            });
+
+        });
+
+    });
+
+    describe('for RegExp properties', () => {
+
+        class Matcher {
+            @Serializable.Prop() public exp: RegExp;
+        }
+
+        describe('when serialized value is a RegExp', () => {
+
+            it('serializes to a BSONRegExp', () => {
+                const matcher = Object.assign(new Matcher(), { exp: /test/i });
+                const serialized = serialize(matcher);
+                expect(serialized).to.deep.equal({ exp: new BSONRegExp('test', 'i') });
+            });
+
+        });
+
+        describe('when serialized value is not a RegExp', () => {
+
+            it('should fail to serialize', () => {
+                const matcher = Object.assign(new Matcher(), { exp: 'test' });
+                expect(
+                    () => serialize(matcher)
+                ).to.throw('Unable to serialize property "exp": Not a RegExp');
+            });
+
+        });
+
+        describe('when deserialized value is a BSONRegExp', () => {
+
+            it('deserializes to a RegExp', () => {
+                const serialized = { exp: new BSONRegExp('test', 'i') };
+                const deserialized = deserialize(Matcher, serialized);
+                expect(deserialized).to.deep.equal({ exp: /test/i });
+            });
+
+        });
+
+        describe('when deserialized value is not a BSONRegExp', () => {
+
+            it('should fail to deserialize', () => {
+                const serialized = { exp: 'test' };
+                expect(
+                    () => deserialize(Matcher, serialized)
+                ).to.throw('Unable to deserialize property "exp": Not a BSONRegExp');
+            });
+
+        });
+
+    });
 
 });

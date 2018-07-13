@@ -67,7 +67,7 @@ BsonSerializable.Type<BSONRegExp, RegExp>({
     up: (serialized: any) => {
         if (serialized === null || serialized === undefined) {
             return serialized as null | undefined;
-        } else if (serialized._bsontype = 'BSONRegExp') {
+        } else if (serialized._bsontype === 'BSONRegExp') {
             return new RegExp(serialized.pattern, serialized.options);
         } else {
             throw new Error(`Not a BSONRegExp (typeof: "${typeof(serialized)}", value: "${serialized}")`);
