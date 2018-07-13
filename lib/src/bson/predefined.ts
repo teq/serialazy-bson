@@ -34,13 +34,13 @@ BsonSerializable.Type<Double | Int32, number>({
     up: (serialized: any) => {
         if (serialized === null || serialized === undefined) {
             return serialized as null | undefined;
-        } else {
+        } else if (serialized._bsontype === 'Double' || serialized._bsontype === 'Int32') {
             const num = serialized.valueOf && serialized.valueOf();
-            if (typeof num !== 'number') {
-                throw new Error(`Not a Double/Int32 BSON type (typeof: "${typeof(serialized)}", value: "${serialized}")`);
+            if (typeof num === 'number') {
+                return num;
             }
-            return num;
         }
+        throw new Error(`Not a Double/Int32 BSON type (typeof: "${typeof(serialized)}", value: "${serialized}")`);
     }
 })(Number as any as Constructor<number>);
 
@@ -67,10 +67,10 @@ BsonSerializable.Type<BSONRegExp, RegExp>({
     up: (serialized: any) => {
         if (serialized === null || serialized === undefined) {
             return serialized as null | undefined;
-        } else if (typeof serialized.pattern !== 'string' || typeof serialized.options !== 'string') {
-            throw new Error(`Not a BSONRegExp (typeof: "${typeof(serialized)}", value: "${serialized}")`);
-        } else {
+        } else if (serialized._bsontype = 'BSONRegExp') {
             return new RegExp(serialized.pattern, serialized.options);
+        } else {
+            throw new Error(`Not a BSONRegExp (typeof: "${typeof(serialized)}", value: "${serialized}")`);
         }
     }
 })(RegExp);

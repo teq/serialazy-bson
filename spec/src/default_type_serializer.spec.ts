@@ -1,3 +1,4 @@
+import { Double, Int32 } from 'bson';
 import chai = require('chai');
 
 import { deserialize, Serializable, serialize } from '../..';
@@ -63,7 +64,98 @@ describe('default type serializer', () => {
 
     });
 
-    describe('for number properties', () => {});
+    describe('for number properties', () => {
+
+        class Patient {
+            @Serializable.Prop() public age: number;
+        }
+
+        describe('when serialized value is an integer', () => {
+
+            describe('of primitive type', () => {
+
+                it('serializes to BSON Int32', () => {
+                    const patient = Object.assign(new Patient(), { age: 40 });
+                    const serialized = serialize(patient);
+                    expect(serialized).to.deep.equal({ age: new Int32(40) });
+                });
+
+            });
+
+            describe('of object type', () => {
+
+                it('serializes to BSON Int32', () => {
+                    const patient = Object.assign(new Patient(), { age: new Number(40) });
+                    const serialized = serialize(patient);
+                    expect(serialized).to.deep.equal({ age: new Int32(40) });
+                });
+
+            });
+
+        });
+
+        describe('when serialized value is a non-integer', () => {
+
+            describe('of primitive type', () => {
+
+                it('serializes to BSON Double', () => {
+                    const patient = Object.assign(new Patient(), { age: 40.5 });
+                    const serialized = serialize(patient);
+                    expect(serialized).to.deep.equal({ age: new Double(40.5) });
+                });
+
+            });
+
+            describe('of object type', () => {
+
+                it('serializes to BSON Double', () => {
+                    const patient = Object.assign(new Patient(), { age: new Number(40.5) });
+                    const serialized = serialize(patient);
+                    expect(serialized).to.deep.equal({ age: new Double(40.5) });
+                });
+
+            });
+
+        });
+
+        describe('when deserialized value is BSON Int32', () => {
+
+            it('deserializes to a number', () => {
+                const deserialized = deserialize(Patient, { age: new Int32(45) });
+                expect(deserialized instanceof Patient).to.equal(true);
+                expect(deserialized).to.deep.equal({ age: 45 });
+            });
+
+        });
+
+        describe('when deserialized value is BSON Double', () => {
+
+            it('deserializes to a number', () => {
+                const deserialized = deserialize(Patient, { age: new Double(45.5) });
+                expect(deserialized instanceof Patient).to.equal(true);
+                expect(deserialized).to.deep.equal({ age: 45.5 });
+            });
+
+        });
+
+        describe('when the value is a non-number', () => {
+
+            it('should fail to serialize', () => {
+                const patient = Object.assign(new Patient(), { age: new Date() });
+                expect(
+                    () => serialize(patient)
+                ).to.throw('Unable to serialize property "age": Not a number');
+            });
+
+            it('should fail to deserialize', () => {
+                expect(
+                    () => deserialize(Patient, { age: new Date() as any })
+                ).to.throw('Unable to deserialize property "age": Not a Double/Int32');
+            });
+
+        });
+
+    });
 
     describe('for string properties', () => {
 
