@@ -2,7 +2,7 @@ import {
     ObjectPropertySerializer,
     ObjectSerializable,
     TypeSerializer
-} from 'serialazy';
+} from '@teqlab/serialazy';
 
 import BsonType from './bson_type';
 

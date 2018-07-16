@@ -1,5 +1,5 @@
 {
-  "name": "serialazy-bson",
+  "name": "@teqlab/serialazy-bson",
   "version": "1.0.0",
   "description": "A TypeScript class serialization library (BSON backend)",
   "keywords": [
@@ -22,7 +22,7 @@
   "main": "./lib/dist/index.js",
   "types": "./lib/dist/index.d.ts",
   "scripts": {
-    "lint": "tslint -p ./lib && tslint -p ./spec && tslint -p ./samples",
+    "lint": "tslint -p ./lib && tslint -p ./spec",
     "apidoc": "typedoc --target ES6 --module commonjs --excludePrivate --out ./docs ./lib/src && touch ./docs/.nojekyll",
     "clean_lib": "rm -rf ./lib/dist",
     "clean_spec": "rm -rf ./spec/bin",
@@ -38,6 +38,9 @@
   "dependencies": {
     "@types/bson": "^1.0.10",
     "bson": "^1.0.6"
+  },
+  "peerDependencies": {
+    "@teqlab/serialazy": "^3.0.0"
   },
   "devDependencies": {
     "@types/chai": "^4.0.4",

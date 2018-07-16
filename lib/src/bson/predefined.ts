@@ -1,4 +1,4 @@
-import { Constructor, Util } from 'serialazy';
+import { Constructor, Util } from '@teqlab/serialazy';
 
 import BsonSerializable from "./bson_serializable";
 import { BSONRegExp, Double, Int32 } from './bson_type';

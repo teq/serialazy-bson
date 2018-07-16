@@ -1,6 +1,6 @@
 import { BSON } from 'bson';
-import { Constructor, TypeSerializer } from 'serialazy';
 
+import { Constructor, TypeSerializer } from '@teqlab/serialazy';
 import BsonType from './bson_type';
 import './predefined';
 
