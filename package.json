@@ -40,7 +40,7 @@
     "bson": "^1.0.6"
   },
   "peerDependencies": {
-    "@teqlab/serialazy": "^3.0.0"
+    "serialazy": "^3.0.0"
   },
   "devDependencies": {
     "@types/chai": "^4.0.4",

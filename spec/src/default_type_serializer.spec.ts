@@ -1,7 +1,7 @@
 import { BSONRegExp, Double, Int32 } from 'bson';
 import chai = require('chai');
 
-import { deserialize, Serializable, serialize } from 'serialazy';
+import { deserialize, Serializable, serialize } from 'serialazy-bson';
 
 const { expect } = chai;
 
