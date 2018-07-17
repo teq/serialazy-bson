@@ -1,6 +1,6 @@
 {
-  "name": "@teqlab/serialazy-bson",
-  "version": "0.0.1",
+  "name": "serialazy-bson",
+  "version": "1.0.0-rc.1",
   "description": "A TypeScript class serialization library (BSON backend)",
   "keywords": [
     "serialazy",
