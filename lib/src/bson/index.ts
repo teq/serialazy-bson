@@ -83,6 +83,9 @@ function deserializeFromBsonBinary<T>(ctor: Constructor<T>, serialized: Buffer):
 
 }
 
+// Types
+export * from './bson_type';
+
 // Functions
 export {
     serializeToBson,
