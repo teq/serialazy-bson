@@ -1,4 +1,4 @@
-import { BSON } from 'bson';
+import { deserialize, serialize } from 'bson';
 import {
     Constructor,
     DecoratorFactory,
@@ -12,7 +12,6 @@ import {
 import { BSONRegExp, BsonType, Double, Int32 } from './bson_type';
 
 const BACKEND = 'bson';
-const bson = new BSON();
 const picker = new TypeSerializerPicker<BsonType>(BACKEND);
 const decoratorFactory = new DecoratorFactory<BsonType>(BACKEND);
 
@@ -51,7 +50,7 @@ export function deflateToBinary<TOriginal>(
     options?: DeflateOptions<BsonType, TOriginal>
 ): Buffer {
     const bsonType = deflate(serializable, options);
-    return bson.serialize(bsonType);
+    return serialize(bsonType);
 }
 
 /**
@@ -82,7 +81,7 @@ export function inflateFromBinary<TOriginal>(
     options?: InflateOptions<BsonType, TOriginal>
 ): TOriginal {
 
-    const bsonType: BsonType = bson.deserialize(serialized, {
+    const bsonType: BsonType = deserialize(serialized, {
         promoteValues: false,
         promoteLongs: false,
         bsonRegExp: true

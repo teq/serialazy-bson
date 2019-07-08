@@ -36,8 +36,8 @@
   "author": "Andrey Tselischev <vorteq@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@types/bson": "^1.0.11",
-    "bson": "^1.0.6"
+    "@types/bson": "^4.0.0",
+    "bson": "^4.0.2"
   },
   "peerDependencies": {
     "serialazy": "^3.0.0-rc.4"
