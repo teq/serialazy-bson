@@ -37,10 +37,8 @@
   "license": "MIT",
   "dependencies": {
     "@types/bson": "^4.0.0",
-    "bson": "^4.0.2"
-  },
-  "peerDependencies": {
-    "serialazy": "^3.0.0-rc.4"
+    "bson": "^4.0.2",
+    "serialazy": "^3.0.0-rc.6"
   },
   "devDependencies": {
     "@types/chai": "^4.0.4",
