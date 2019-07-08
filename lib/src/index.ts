@@ -2,8 +2,9 @@ import { BSON } from 'bson';
 import {
     Constructor,
     DecoratorFactory,
-    ObjectPropertySerializer,
-    TypeSerializer,
+    DeflateOptions,
+    InflateOptions,
+    SerializeDecoratorOptions,
     TypeSerializerPicker,
     Util
 } from 'serialazy';
@@ -17,32 +18,39 @@ const decoratorFactory = new DecoratorFactory<BsonType>(BACKEND);
 
 /**
  * Define serializer for given property or type
- * @param params _(optional)_ Custom type serializer and/or options
+ * @param options _(optional)_ Custom type serializer and/or other options
  * @returns Type/property decorator
  */
 export function Serialize<TSerialized extends BsonType, TOriginal>(
-    params?: TypeSerializer<TSerialized, TOriginal> & ObjectPropertySerializer.Options
-) {
-    return decoratorFactory.create(params);
+    options?: SerializeDecoratorOptions<TSerialized, TOriginal>
+): (protoOrCtor: Object | Constructor<TOriginal>, propertyName?: string) => void {
+    return decoratorFactory.create(options);
 }
 
 /**
  * Serialize given serializable type instance to BSON type
  * @param serializable Serializable type instance
- * @param ctor _(optional)_ Serializable type constructor function. If provided, it overrides the type of serializable.
+ * @param options _(optional)_ Deflate options
  * @returns BSON type (js-bson)
  */
-export function deflate<TOriginal>(serializable: TOriginal, ctor?: Constructor<TOriginal>): BsonType {
-    return picker.deflate(serializable, ctor);
+export function deflate<TOriginal>(
+    serializable: TOriginal,
+    options?: DeflateOptions<BsonType, TOriginal>
+): BsonType {
+    return picker.deflate(serializable, options);
 }
 
 /**
  * Serialize given serializable type instance to BSON binary
  * @param serializable Serializable type instance
+ * @param options _(optional)_ Deflate options
  * @returns Buffer with BSON binary
  */
-export function deflateToBinary<TOriginal>(serializable: TOriginal): Buffer {
-    const bsonType = deflate(serializable);
+export function deflateToBinary<TOriginal>(
+    serializable: TOriginal,
+    options?: DeflateOptions<BsonType, TOriginal>
+): Buffer {
+    const bsonType = deflate(serializable, options);
     return bson.serialize(bsonType);
 }
 
@@ -50,19 +58,29 @@ export function deflateToBinary<TOriginal>(serializable: TOriginal): Buffer {
  * Construct/deserialize a serializable type instance from BSON type
  * @param ctor Serializable type constructor function
  * @param serialized BSON object (js-bson)
+ * @param options _(optional)_ Inflate options
  * @returns Serializable type instance
  */
-export function inflate<TOriginal>(ctor: Constructor<TOriginal>, serialized: BsonType): TOriginal {
-    return picker.inflate(ctor, serialized);
+export function inflate<TOriginal>(
+    ctor: Constructor<TOriginal>,
+    serialized: BsonType,
+    options?: InflateOptions<BsonType, TOriginal>
+): TOriginal {
+    return picker.inflate(ctor, serialized, options);
 }
 
 /**
  * Construct/deserialize a serializable type instance from BSON binary
  * @param ctor Serializable type constructor function
  * @param serialized Buffer with BSON binary
+ * @param options _(optional)_ Inflate options
  * @returns Serializable type instance
  */
-export function inflateFromBinary<TOriginal>(ctor: Constructor<TOriginal>, serialized: Buffer): TOriginal {
+export function inflateFromBinary<TOriginal>(
+    ctor: Constructor<TOriginal>,
+    serialized: Buffer,
+    options?: InflateOptions<BsonType, TOriginal>
+): TOriginal {
 
     const bsonType: BsonType = bson.deserialize(serialized, {
         promoteValues: false,
@@ -70,7 +88,7 @@ export function inflateFromBinary<TOriginal>(ctor: Constructor<TOriginal>, seria
         bsonRegExp: true
     });
 
-    return inflate(ctor, bsonType);
+    return inflate(ctor, bsonType, options);
 }
 
 // Types
