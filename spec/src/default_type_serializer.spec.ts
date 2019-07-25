@@ -66,7 +66,7 @@ describe('default type serializer', () => {
 
     describe('for number properties', () => {
 
-        class Patient {
+        class Person {
             @Serialize() public age: number;
         }
 
@@ -75,8 +75,8 @@ describe('default type serializer', () => {
             describe('of primitive type', () => {
 
                 it('serializes to BSON Int32', () => {
-                    const patient = Object.assign(new Patient(), { age: 40 });
-                    const serialized = deflate(patient);
+                    const person = Object.assign(new Person(), { age: 40 });
+                    const serialized = deflate(person);
                     expect(serialized).to.deep.equal({ age: new Int32(40) });
                 });
 
@@ -85,8 +85,8 @@ describe('default type serializer', () => {
             describe('of object type', () => {
 
                 it('serializes to BSON Int32', () => {
-                    const patient = Object.assign(new Patient(), { age: new Number(40) });
-                    const serialized = deflate(patient);
+                    const person = Object.assign(new Person(), { age: new Number(40) });
+                    const serialized = deflate(person);
                     expect(serialized).to.deep.equal({ age: new Int32(40) });
                 });
 
@@ -99,8 +99,8 @@ describe('default type serializer', () => {
             describe('of primitive type', () => {
 
                 it('serializes to BSON Double', () => {
-                    const patient = Object.assign(new Patient(), { age: 40.5 });
-                    const serialized = deflate(patient);
+                    const person = Object.assign(new Person(), { age: 40.5 });
+                    const serialized = deflate(person);
                     expect(serialized).to.deep.equal({ age: new Double(40.5) });
                 });
 
@@ -109,8 +109,8 @@ describe('default type serializer', () => {
             describe('of object type', () => {
 
                 it('serializes to BSON Double', () => {
-                    const patient = Object.assign(new Patient(), { age: new Number(40.5) });
-                    const serialized = deflate(patient);
+                    const person = Object.assign(new Person(), { age: new Number(40.5) });
+                    const serialized = deflate(person);
                     expect(serialized).to.deep.equal({ age: new Double(40.5) });
                 });
 
@@ -121,8 +121,8 @@ describe('default type serializer', () => {
         describe('when deserialized value is BSON Int32', () => {
 
             it('deserializes to a number', () => {
-                const deserialized = inflate(Patient, { age: new Int32(45) });
-                expect(deserialized instanceof Patient).to.equal(true);
+                const deserialized = inflate(Person, { age: new Int32(45) });
+                expect(deserialized instanceof Person).to.equal(true);
                 expect(deserialized).to.deep.equal({ age: 45 });
             });
 
@@ -131,8 +131,8 @@ describe('default type serializer', () => {
         describe('when deserialized value is BSON Double', () => {
 
             it('deserializes to a number', () => {
-                const deserialized = inflate(Patient, { age: new Double(45.5) });
-                expect(deserialized instanceof Patient).to.equal(true);
+                const deserialized = inflate(Person, { age: new Double(45.5) });
+                expect(deserialized instanceof Person).to.equal(true);
                 expect(deserialized).to.deep.equal({ age: 45.5 });
             });
 
@@ -141,15 +141,15 @@ describe('default type serializer', () => {
         describe('when the value is a non-number', () => {
 
             it('should fail to serialize', () => {
-                const patient = Object.assign(new Patient(), { age: new Date() });
+                const person = Object.assign(new Person(), { age: new Date() });
                 expect(
-                    () => deflate(patient)
+                    () => deflate(person)
                 ).to.throw('Unable to serialize property "age": Not a number');
             });
 
             it('should fail to deserialize', () => {
                 expect(
-                    () => inflate(Patient, { age: new Date() as any })
+                    () => inflate(Person, { age: new Date() as any })
                 ).to.throw('Unable to deserialize property "age": Not a Double/Int32');
             });
 

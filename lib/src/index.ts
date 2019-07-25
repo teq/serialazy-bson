@@ -2,18 +2,16 @@ import { deserialize, serialize } from 'bson';
 import {
     Constructor,
     DecoratorFactory,
+    DecoratorOptions,
     DeflateOptions,
+    FrontendFunctions,
     InflateOptions,
-    SerializeDecoratorOptions,
-    TypeSerializerPicker,
     Util
 } from 'serialazy';
 
 import { BSONRegExp, BsonType, Double, Int32 } from './bson_type';
 
 const BACKEND = 'bson';
-const picker = new TypeSerializerPicker<BsonType>(BACKEND);
-const decoratorFactory = new DecoratorFactory<BsonType>(BACKEND);
 
 /**
  * Define serializer for given property or type
@@ -21,9 +19,9 @@ const decoratorFactory = new DecoratorFactory<BsonType>(BACKEND);
  * @returns Type/property decorator
  */
 export function Serialize<TSerialized extends BsonType, TOriginal>(
-    options?: SerializeDecoratorOptions<TSerialized, TOriginal>
+    options?: DecoratorOptions<TSerialized, TOriginal>
 ): (protoOrCtor: Object | Constructor<TOriginal>, propertyName?: string) => void {
-    return decoratorFactory.create(options);
+    return DecoratorFactory(BACKEND, options);
 }
 
 /**
@@ -36,7 +34,7 @@ export function deflate<TOriginal>(
     serializable: TOriginal,
     options?: DeflateOptions<BsonType, TOriginal>
 ): BsonType {
-    return picker.deflate(serializable, options);
+    return FrontendFunctions<BsonType>(BACKEND).deflate(serializable, options);
 }
 
 /**
@@ -65,7 +63,7 @@ export function inflate<TOriginal>(
     serialized: BsonType,
     options?: InflateOptions<BsonType, TOriginal>
 ): TOriginal {
-    return picker.inflate(ctor, serialized, options);
+    return FrontendFunctions<BsonType>(BACKEND).inflate(ctor, serialized, options);
 }
 
 /**
