@@ -23,7 +23,7 @@ export const BACKEND_NAME = 'bson';
 export function Serialize<TSerialized extends BsonType, TOriginal>(
     options?: DecoratorOptions<TSerialized, TOriginal>
 ): (protoOrCtor: Object | Constructor<TOriginal>, propertyName?: string) => void {
-    return DecoratorFactory(BACKEND_NAME, options);
+    return DecoratorFactory<BsonType, TOriginal>(BACKEND_NAME, options);
 }
 
 /**
@@ -36,7 +36,7 @@ export function deflate<TOriginal>(
     serializable: TOriginal,
     options?: DeflateOptions<BsonType, TOriginal>
 ): BsonType {
-    return FrontendFunctions<BsonType>(BACKEND_NAME).deflate(serializable, options);
+    return FrontendFunctions(BACKEND_NAME).deflate<BsonType, TOriginal>(serializable, options);
 }
 
 /**
@@ -65,7 +65,7 @@ export function inflate<TOriginal>(
     serialized: BsonType,
     options?: InflateOptions<BsonType, TOriginal>
 ): TOriginal {
-    return FrontendFunctions<BsonType>(BACKEND_NAME).inflate(ctor, serialized, options);
+    return FrontendFunctions(BACKEND_NAME).inflate<BsonType, TOriginal>(ctor, serialized, options);
 }
 
 /**
