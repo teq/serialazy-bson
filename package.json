@@ -1,6 +1,6 @@
 {
   "name": "serialazy-bson",
-  "version": "1.0.0-rc.12",
+  "version": "1.0.0-rc.13",
   "description": "A TypeScript class serialization library (BSON backend)",
   "keywords": [
     "serialazy",
@@ -38,7 +38,7 @@
   "dependencies": {
     "@types/bson": "^4.0.0",
     "bson": "^4.0.2",
-    "serialazy": "^3.0.0-rc.12"
+    "serialazy": "^3.0.0-rc.13"
   },
   "devDependencies": {
     "@types/chai": "^4.0.4",
@@ -47,8 +47,8 @@
     "@types/node": "^12.12.27",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
-    "mocha": "^5.2.0",
-    "tslint": "^5.18.0",
+    "mocha": "^7.1.1",
+    "tslint": "^6.1.0",
     "typescript": "^3.7.5"
   }
 }
