@@ -50,7 +50,11 @@ export function deflateToBinary<TOriginal>(
     options?: DeflateOptions<BsonType, TOriginal>
 ): Buffer {
     const bsonType = deflate(serializable, options);
-    return serialize(bsonType);
+    if (bsonType === null || bsonType === undefined) {
+        return bsonType as null | undefined;
+    } else {
+        return serialize(bsonType);
+    }
 }
 
 /**
@@ -81,13 +85,16 @@ export function inflateFromBinary<TOriginal>(
     options?: InflateOptions<BsonType, TOriginal>
 ): TOriginal {
 
-    const bsonType: BsonType = deserialize(serialized, {
-        promoteValues: false,
-        promoteLongs: false,
-        bsonRegExp: true
-    });
+    const bsonType: BsonType = (serialized === null || serialized === undefined)
+        ? serialized
+        : deserialize(serialized, {
+            promoteValues: false,
+            promoteLongs: false,
+            bsonRegExp: true
+        });
 
     return inflate(ctor, bsonType, options);
+
 }
 
 // Types
